@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecurAI-Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+            <span>SecurAI</span>
+        </div>
+        <div class="nav-links">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('upload') }}">Upload</a>
+        </div>
+    </nav>
+
+    <!-- Main Result Section -->
+    <div class="result-container">
+        <h1>Deep Fake Detection Results</h1>
+
+        <!-- Video Preview Section -->
+        <div class="video-container">
+            <h2>Analyzed Video:</h2>
+            <video id="video-preview" controls>
+                <source id="video-source" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <p id="video-name"></p>
+        </div>
+
+        <!-- Prediction Result -->
+        <div class="prediction-box {% if prediction == 'Fake' %}fake-result{% else %}real-result{% endif %}">
+            <h2>Prediction: <span id="prediction-text">{{ prediction }}</span></h2>
+        </div>
+
+        <a href="{{ url_for('upload') }}" class="upload-another">📂 Analyze Another Video</a>
+    </div>
+
+    <!-- JavaScript for Video Preview -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var videoSource = document.getElementById("video-source");
+            var videoElement = document.getElementById("video-preview");
+            var videoNameElement = document.getElementById("video-name");
+            var uploadedVideo = localStorage.getItem("uploadedVideo");
+            var uploadedVideoName = localStorage.getItem("uploadedVideoName");
+
+            if (uploadedVideo) {
+                videoSource.src = uploadedVideo;
+                videoElement.load();
+                videoNameElement.innerText = "File: " + uploadedVideoName;
+            } else {
+                var videoFileName = "{{ filename }}";
+                if (videoFileName) {
+                    var videoURL = "{{ url_for('uploaded_file', filename=filename) }}";
+                    videoSource.src = videoURL;
+                    videoElement.load();
+                    videoNameElement.innerText = "File: " + videoFileName;
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>

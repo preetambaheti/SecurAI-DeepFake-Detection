@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> - SecurAI-</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+            <span>SecurAI</span>
+        </div>
+        <div class="nav-links">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('upload') }}">Upload</a>
+        </div>
+    </nav>
+
+    <!-- Processing Section -->
+    <section class="processing-section">
+        <h1>Processing Video... Please Wait</h1>
+        
+        <!-- Processing Icon -->
+        <img src="{{ url_for('static', filename='images/processing-icon.png') }}" alt="Processing Icon" class="processing-icon">
+        
+        <!-- Progress Bar -->
+        <div class="progress-bar-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <p class="progress-text">Analyzing frame by frame for deep fake detection...</p>
+            <p class="time-remaining">Estimated time remaining: <span id="time-left">5</span> seconds</p>
+        </div>
+    </section>
+
+    <script>
+        // Simulating progress bar animation
+        let progress = 0;
+        let timeRemaining = 5;
+
+        function updateProgress() {
+            if (progress < 100) {
+                progress += 5;
+                timeRemaining--;
+                document.getElementById("progress-fill").style.width = progress + "%";
+                document.getElementById("time-left").innerText = timeRemaining;
+                setTimeout(updateProgress, 1000);
+            } else {
+                window.location.href = "{{ url_for('home') }}";  // Redirect after completion
+            }
+        }
+
+        setTimeout(updateProgress, 1000);
+    </script>
+
+</body>
+</html>
